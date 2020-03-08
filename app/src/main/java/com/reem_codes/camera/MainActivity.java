@@ -26,29 +26,32 @@ public class MainActivity extends AppCompatActivity {
     private Camera mCamera;
     private int PERMISSION_CALLBACK_CONSTANT = 1000;
     ImageView myImageView;
-    int DELAYED_TIME = 2000;
+    int DELAYED_TIME = 0;
     boolean IS_NEGATIVE = false;
     Camera.Parameters parameters;
+    AnimationDrawable frameAnimation;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
         startQRScanner();
     }
 
     private void sucessQr() {
-
-        setContentView(R.layout.activity_main);
         checkAndGivePermission();
+
         // animation
         myImageView = (ImageView) findViewById(R.id.img);
-        myImageView.setBackgroundResource(R.drawable.spin_animation);
-        AnimationDrawable frameAnimation = (AnimationDrawable) myImageView.getBackground();
+        myImageView.setImageResource(R.drawable.spin_animation);
+        frameAnimation = (AnimationDrawable) myImageView.getDrawable();
         frameAnimation.start();
+
 
         // play sound
         mediaPlayer = MediaPlayer.create(this, R.raw.sound);
         mediaPlayer.setLooping(true);
         mediaPlayer.start();
+
 
         // negative
         parameters = mCamera.getParameters();
@@ -69,13 +72,13 @@ public class MainActivity extends AppCompatActivity {
                 }
                 catch (Exception e){
                     System.out.println("GPDEBUG "+ e.getMessage());
+                }finally {
+                    DELAYED_TIME = 2000;
                 }
                 handler.postDelayed(this, DELAYED_TIME);
             }
         };
         handler.post(runnable);
-
-
 
     }
 
@@ -190,7 +193,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateText(String scanCode) {
-        if(scanCode.toLowerCase().equals("amal")) {
+        if(scanCode.toLowerCase().equals("circugram")) {
             sucessQr();
 
         } else{
